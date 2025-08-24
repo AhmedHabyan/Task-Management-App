@@ -21,6 +21,6 @@
         tools:layout="@layout/fragment_create_task" >
         <argument
             android:name="task"
-            app:argType="com.example.taskmanagement.domain.Task" />
+            app:argType="com.example.taskmanagement.domain.model.Task" />
     </fragment>
 </navigation>

@@ -1,18 +1,22 @@
 package com.example.taskmanagement.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.taskmanagement.R
 import com.example.taskmanagement.databinding.FragmentCreateTaskBinding
-import com.example.taskmanagement.domain.Task
+import com.example.taskmanagement.domain.model.Task
 import com.example.taskmanagement.presentation.Constants
 import com.example.taskmanagement.presentation.viewModel.ActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class CreateTaskFragment : Fragment() {
 
     private var editFragmentBinding: FragmentCreateTaskBinding? =null
@@ -46,9 +50,31 @@ class CreateTaskFragment : Fragment() {
     private fun onEditableButtonClick() {
         editFragmentBinding?.editAddBtn?.setOnClickListener{
             if(isValidInput() && viewModel.isEditMode){
+                Log.e("edit","${args.task.id}")
                 //edit Task
+                viewModel.updateTask(
+                    args.task.copy(
+                        title = editFragmentBinding?.textInputEditTextTaskTitle?.text.toString(),
+                        description = editFragmentBinding?.textInputEditTextTaskDescription?.text.toString()
+                    )
+                ){
+                    findNavController().popBackStack()
+                }
+
             }else if(isValidInput()){
                 //Add Task
+                viewModel.insertTask(
+                    Task(
+                        id=0,
+                        title = editFragmentBinding?.textInputEditTextTaskTitle?.text.toString(),
+                        description = editFragmentBinding?.textInputEditTextTaskDescription?.text.toString(),
+                        status = Constants.PENDING,
+                        statusColor = R.color.blue.toString()
+                    )
+                ){
+                    findNavController().popBackStack()
+                }
+
             }
         }
     }

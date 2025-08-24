@@ -8,7 +8,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.taskmanagement.R
 import com.example.taskmanagement.presentation.viewModel.ActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private var activityViewModel:ActivityViewModel?=null
