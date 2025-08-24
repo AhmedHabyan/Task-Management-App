@@ -57,6 +57,10 @@ class TaskAdapter(
         return taskRemoved
     }
 
+    fun getTasks(): List<Task> {
+    return tasks
+    }
+
     fun interface OnTaskClickListener{
         fun onTaskClick(task: Task)
     }

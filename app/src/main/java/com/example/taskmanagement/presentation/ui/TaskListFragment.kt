@@ -26,6 +26,7 @@ import com.example.taskmanagement.presentation.adapter.TaskAdapter
 import com.example.taskmanagement.presentation.utils.clearVisiblity
 import com.example.taskmanagement.presentation.utils.navigateSafeDirections
 import com.example.taskmanagement.presentation.utils.setVisiblity
+import com.example.taskmanagement.presentation.utils.showCurrentNotification
 import com.example.taskmanagement.presentation.viewModel.ActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -73,7 +74,11 @@ TaskAdapter.OnTaskStatusButtonListener{
                         }
                         is UiState.Success -> {
                             viewBinding?.progressBar?.clearVisiblity()
-                            taskAdapter?.setAdapter(it.tasks)
+                            if(it.tasks.isNotEmpty()) {
+                                viewBinding?.tvEmpty?.clearVisiblity()
+                                viewBinding?.recyclerViewTasks?.setVisiblity()
+                                taskAdapter?.setAdapter(it.tasks)
+                            }
                         }
                     }
                 }
@@ -154,7 +159,18 @@ TaskAdapter.OnTaskStatusButtonListener{
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val taskRemoved= taskAdapter?.deleteItem(viewHolder.adapterPosition)
-            taskRemoved?.let {  viewModel.deleteTask(it)}
+            taskRemoved?.let {  viewModel.deleteTask(it,
+                onComplete = {
+                    showCurrentNotification(
+                        context = requireContext(),
+                        title = "task deleted",
+                        description = "task deleted succesfully"
+                    )
+                    if(taskAdapter?.getTasks()?.isEmpty() == true){
+                        viewBinding?.tvEmpty?.setVisiblity()
+                        viewBinding?.recyclerViewTasks?.clearVisiblity()
+                    }
+                })}
 
         }
 

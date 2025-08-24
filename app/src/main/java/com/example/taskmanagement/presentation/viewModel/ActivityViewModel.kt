@@ -59,9 +59,15 @@ class ActivityViewModel @Inject constructor(
             }
         }
     }
-    fun deleteTask(task:Task){
+    fun deleteTask(task:Task,onComplete: () -> Unit){
         viewModelScope.launch(Dispatchers.IO) {
             repo.deleteTask(task)
+        }.invokeOnCompletion {
+            viewModelScope.launch {
+                withContext(Dispatchers.Main){
+                    onComplete()
+                }
+            }
         }
     }
 
