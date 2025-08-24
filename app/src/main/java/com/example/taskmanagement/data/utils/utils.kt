@@ -1,6 +1,6 @@
 package com.example.taskmanagement.data.utils
 
-import com.example.core.task_room.TaskEntity
+import com.example.corefeatures.task_room.TaskEntity
 import com.example.taskmanagement.domain.model.Task
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

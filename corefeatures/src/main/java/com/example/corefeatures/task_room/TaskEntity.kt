@@ -1,4 +1,4 @@
-package com.example.core.task_room
+package com.example.corefeatures.task_room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

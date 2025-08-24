@@ -1,7 +1,7 @@
 package com.example.taskmanagement.domain.model
 
 import android.os.Parcelable
-import com.example.core.task_room.TaskEntity
+import com.example.corefeatures.task_room.TaskEntity
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

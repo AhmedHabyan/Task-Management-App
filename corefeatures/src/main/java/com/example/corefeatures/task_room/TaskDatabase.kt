@@ -1,4 +1,4 @@
-package com.example.core.task_room
+package com.example.corefeatures.task_room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

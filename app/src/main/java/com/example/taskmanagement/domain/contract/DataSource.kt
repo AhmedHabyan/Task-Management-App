@@ -1,6 +1,6 @@
 package com.example.taskmanagement.domain.contract
 
-import com.example.core.task_room.TaskEntity
+
 import com.example.taskmanagement.domain.model.Task
 
 interface DataSource {

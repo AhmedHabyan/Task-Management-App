@@ -1,8 +1,8 @@
-package com.example.core.task_room.di
+package com.example.corefeatures.task_room.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.core.task_room.TaskDatabase
+import com.example.corefeatures.task_room.TaskDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.example.core.task_room
+package com.example.corefeatures.task_room
 
 import androidx.room.Dao
 import androidx.room.Delete

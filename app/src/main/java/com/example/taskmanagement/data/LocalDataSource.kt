@@ -1,7 +1,7 @@
 package com.example.taskmanagement.data
 
 
-import com.example.core.task_room.TaskDatabase
+import com.example.corefeatures.task_room.TaskDatabase
 import com.example.taskmanagement.data.utils.toTask
 import com.example.taskmanagement.domain.contract.DataSource
 import com.example.taskmanagement.domain.model.Task
