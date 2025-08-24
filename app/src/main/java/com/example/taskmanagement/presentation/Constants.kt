@@ -1,6 +1,7 @@
 package com.example.taskmanagement.presentation
 
 object Constants {
+    const val DELETE = "Delete"
     const val EDIT_TASK= "Edit Task"
     const val PENDING= "Pending"
     const val DONE= "Done"

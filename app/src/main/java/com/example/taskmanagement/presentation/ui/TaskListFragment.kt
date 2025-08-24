@@ -1,17 +1,21 @@
 package com.example.taskmanagement.presentation.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Canvas
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.taskmanagement.R
@@ -24,6 +28,7 @@ import com.example.taskmanagement.presentation.utils.navigateSafeDirections
 import com.example.taskmanagement.presentation.utils.setVisiblity
 import com.example.taskmanagement.presentation.viewModel.ActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -93,13 +98,16 @@ TaskAdapter.OnTaskStatusButtonListener{
     private fun initTaskRecyclerView() {
 
        taskAdapter = TaskAdapter(
-            emptyList(),
+            mutableListOf(),
             onTaskClick = this,
             onTaskStatusButtonClick = this
         )
         viewBinding?.recyclerViewTasks?.adapter = taskAdapter
         viewBinding?.recyclerViewTasks?.layoutManager= LinearLayoutManager(requireContext(),
             RecyclerView.VERTICAL,false)
+
+        val helper:ItemTouchHelper= ItemTouchHelper(callBack)
+        helper.attachToRecyclerView(viewBinding?.recyclerViewTasks)
     }
 
     override fun onTaskClick(task: Task) {
@@ -110,7 +118,7 @@ TaskAdapter.OnTaskStatusButtonListener{
     }
 
 
-    override fun onTaskButtonClick(task: Task) {
+    override fun onTaskStatusButtonClick(task: Task) {
         if(task.status == Constants.DONE) {
             viewModel.updateTask(
                 task.copy(
@@ -128,10 +136,63 @@ TaskAdapter.OnTaskStatusButtonListener{
                 )
                 ){
                     viewModel.getAllTasks()
-                    Log.e("button","second")
-
-                }
+                 }
             }
 
+    }
+
+    val callBack: ItemTouchHelper.SimpleCallback= object: ItemTouchHelper.SimpleCallback(0,
+        ItemTouchHelper.RIGHT)
+    {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val taskRemoved= taskAdapter?.deleteItem(viewHolder.adapterPosition)
+            taskRemoved?.let {  viewModel.deleteTask(it)}
+
+        }
+
+
+
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                dX,
+                dY,
+                actionState,
+                isCurrentlyActive
+            )
+
+
+            RecyclerViewSwipeDecorator.Builder(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
+                .addBackgroundColor(
+                    ContextCompat.getColor(requireContext(),
+                    R.color.red
+                ))
+                .addActionIcon(R.drawable.ic_delete)
+                .setSwipeRightLabelColor(ContextCompat.getColor(requireContext(), R.color.white))
+                .setSwipeRightLabelTypeface(Typeface.DEFAULT_BOLD)
+                .addSwipeRightLabel(Constants.DELETE)
+                .create()
+                .decorate()
+
+
+        }
     }
 }

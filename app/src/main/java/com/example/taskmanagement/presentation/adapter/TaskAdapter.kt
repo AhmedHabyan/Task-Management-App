@@ -1,18 +1,15 @@
 package com.example.taskmanagement.presentation.adapter
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.taskmanagement.R
 import com.example.taskmanagement.databinding.TaskItemBinding
 import com.example.taskmanagement.domain.model.Task
-import com.example.taskmanagement.presentation.Constants
 
 class TaskAdapter(
-    private var tasks:List<Task>,
+    private var tasks:MutableList<Task>,
     private val onTaskClick:OnTaskClickListener,
     private val onTaskStatusButtonClick:OnTaskStatusButtonListener,
 ):RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
@@ -29,7 +26,7 @@ class TaskAdapter(
                  onTaskClick.onTaskClick(task)
             }
             taskBinding.btnStatus.setOnClickListener {
-                onTaskStatusButtonClick.onTaskButtonClick(task)
+                onTaskStatusButtonClick.onTaskStatusButtonClick(task)
             }
         }
 
@@ -37,7 +34,7 @@ class TaskAdapter(
     }
 
     fun setAdapter(newTasks:List<Task>){
-        tasks= newTasks
+        tasks= newTasks.toMutableList()
         notifyDataSetChanged()
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
@@ -53,11 +50,17 @@ class TaskAdapter(
     }
 
     override fun getItemCount()= tasks.size
+    fun deleteItem(adapterPosition: Int):Task {
+           val taskRemoved = tasks.removeAt(adapterPosition)
+
+            notifyItemRemoved(adapterPosition)
+        return taskRemoved
+    }
 
     fun interface OnTaskClickListener{
         fun onTaskClick(task: Task)
     }
     fun interface OnTaskStatusButtonListener{
-        fun onTaskButtonClick(task: Task)
+        fun onTaskStatusButtonClick(task: Task)
     }
 }
